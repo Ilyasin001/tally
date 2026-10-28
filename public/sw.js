@@ -16,6 +16,6 @@ self.addEventListener('fetch', (e) => {
         }
         return res
       })
-      .catch(() => caches.match(request).then((hit) => hit || caches.match('/'))),
+      .catch(() => caches.match(request).then((hit) => hit || caches.match(self.registration.scope))),
   )
 })

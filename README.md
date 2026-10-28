@@ -21,9 +21,17 @@ npm run build     # type-check and build to dist/
 npm run preview   # serve the production build
 ```
 
-The build is a static site, so `dist/` can go on any static host. It includes a web
-manifest and a small service worker, so it can be installed to a phone or desktop home
-screen and opened offline.
+The build is a static site with relative paths, so `dist/` works on any static host,
+at the domain root or under a sub-path. It includes a web manifest and a small service
+worker, so it can be installed to a phone or desktop home screen and opened offline.
+
+## Deployment
+
+Live at **https://ilyasin001.github.io/tally/**.
+
+Every push to `main` runs `.github/workflows/deploy.yml`, which builds the app and
+publishes it to GitHub Pages. You can also start a deploy by hand from the repo's
+**Actions** tab with **Run workflow**.
 
 ## What's in it
 
