@@ -4,9 +4,10 @@ import { useApp } from '../lib/store'
 import { PRIORITY, PRIORITY_ORDER, STATUS, STATUS_ORDER, sortTasks, taskStats } from '../lib/selectors'
 import { paletteMap, tint } from '../lib/colors'
 import { cn, pct, plural } from '../lib/format'
-import { diffDays, shortDate, todayISO } from '../lib/date'
+import { todayISO } from '../lib/date'
 import type { Priority, Task, TaskStatus } from '../lib/types'
 import { Button, Card, Donut, Empty, Field, IconButton, Legend, Modal, PageHeader, Stat } from '../components/ui'
+import { DueLabel } from '../components/DueLabel'
 
 type Filter = 'open' | 'all' | 'completed'
 
@@ -180,14 +181,6 @@ function QuickAdd() {
       <input className="h-9 min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-faint" placeholder="Add a task and press Enter" value={title} onChange={(e) => setTitle(e.target.value)} />
     </form>
   )
-}
-
-export function DueLabel({ task, today }: { task: Task; today: string }) {
-  if (task.status === 'completed') return <span className="shrink-0 text-xs text-good">Done</span>
-  if (!task.due) return <span className="shrink-0 text-xs text-faint">No date</span>
-  const n = diffDays(today, task.due)
-  const text = n < 0 ? `${-n}d late` : n === 0 ? 'Today' : n === 1 ? 'Tomorrow' : n <= 7 ? `in ${n}d` : shortDate(task.due)
-  return <span className={cn('tnum shrink-0 text-xs', n < 0 ? 'font-medium text-danger' : n <= 1 ? 'text-warn' : 'text-muted')}>{text}</span>
 }
 
 function TaskRow({ task, today, color, onEdit }: { task: Task; today: string; color: string; onEdit: () => void }) {

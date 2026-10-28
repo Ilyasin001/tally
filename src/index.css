@@ -147,9 +147,32 @@ input.bare {
   animation: rise 0.25s ease-out;
 }
 
+/* Loading placeholders: a soft block with a light sweep across it.
+   In the components layer so utilities like rounded-full can override the radius. */
+@layer components {
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--surface-2);
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--text) 7%, transparent), transparent);
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+}
+@keyframes shimmer {
+  to { transform: translateX(100%); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pop,
-  .rise {
+  .rise,
+  .skeleton::after {
     animation: none;
   }
 }

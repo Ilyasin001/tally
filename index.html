@@ -28,7 +28,65 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Shown until the app's JavaScript runs; React replaces it on mount. -->
+    <div id="root">
+      <div class="min-h-dvh md:flex" role="status" aria-busy="true" aria-label="Loading Tally">
+        <aside class="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col border-r border-line px-3 py-5 md:flex">
+          <div class="mb-7 flex items-center gap-2.5 px-2">
+            <img src="/icon.svg" width="28" height="28" alt="" />
+            <span class="font-display text-xl font-semibold tracking-tight">Tally</span>
+          </div>
+          <div class="space-y-1.5">
+            <div class="skeleton h-9 rounded-[10px]"></div>
+            <div class="skeleton h-9 rounded-[10px] opacity-60"></div>
+            <div class="skeleton h-9 rounded-[10px] opacity-60"></div>
+            <div class="skeleton h-9 rounded-[10px] opacity-60"></div>
+            <div class="skeleton h-9 rounded-[10px] opacity-60"></div>
+          </div>
+        </aside>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2 border-b border-line px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 md:hidden">
+            <img src="/icon.svg" width="26" height="26" alt="" />
+            <span class="font-display text-lg font-semibold">Tally</span>
+          </div>
+          <div class="mx-auto max-w-[1380px] px-4 pt-5 sm:px-6 md:pt-8 lg:px-8">
+            <div class="skeleton h-8 w-44 sm:h-9"></div>
+            <div class="skeleton mt-2 h-4 w-64 max-w-[70vw]"></div>
+            <div class="mt-5 grid gap-4 lg:grid-cols-3">
+              <div class="rounded-2xl border border-line bg-surface p-5 lg:row-span-2">
+                <div class="skeleton mb-4 h-3 w-24"></div>
+                <div class="mb-4 flex items-center gap-4">
+                  <div class="skeleton size-[84px] shrink-0 rounded-full"></div>
+                  <div class="min-w-0 flex-1 space-y-2"><div class="skeleton h-4 w-24 max-w-full"></div><div class="skeleton h-3 w-40 max-w-full"></div></div>
+                </div>
+                <div class="space-y-1.5">
+                  <div class="skeleton h-[46px] rounded-xl"></div>
+                  <div class="skeleton h-[46px] rounded-xl"></div>
+                  <div class="skeleton h-[46px] rounded-xl"></div>
+                  <div class="skeleton h-[46px] rounded-xl"></div>
+                  <div class="skeleton h-[46px] rounded-xl"></div>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-line bg-surface p-5">
+                <div class="skeleton mb-4 h-3 w-24"></div>
+                <div class="space-y-3">
+                  <div class="skeleton h-3.5 w-3/4"></div>
+                  <div class="skeleton h-3.5 w-2/3"></div>
+                  <div class="skeleton h-3.5 w-4/5"></div>
+                  <div class="skeleton h-3.5 w-1/2"></div>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-line bg-surface p-5">
+                <div class="skeleton mb-4 h-3 w-24"></div>
+                <div class="skeleton h-9 w-40"></div>
+                <div class="skeleton mt-5 h-1.5 rounded-full"></div>
+                <div class="skeleton mt-5 h-1.5 rounded-full"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

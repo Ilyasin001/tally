@@ -7,7 +7,7 @@ import { cn, money, pct, plural } from '../lib/format'
 import { addDays, fmtDate, monthOf, todayISO, weekdayLetter } from '../lib/date'
 import type { AppState } from '../lib/types'
 import { Bar, Button, Card, PageHeader, Ring } from '../components/ui'
-import { DueLabel } from './Tasks'
+import { DueLabel } from '../components/DueLabel'
 
 function greeting() {
   const h = new Date().getHours()

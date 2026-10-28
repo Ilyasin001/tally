@@ -1,3 +1,6 @@
 node_modules
 dist
 *.local
+
+# Local editor/agent config
+.claude/

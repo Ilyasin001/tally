@@ -1,21 +1,43 @@
-import { useEffect, useState, type ComponentType } from 'react'
+import { lazy, Suspense, useEffect, useState, type ComponentType } from 'react'
 import { ListChecks, Moon, Repeat, Settings2, Sun, SunMedium, Wallet, type LucideIcon } from 'lucide-react'
 import { useApp } from './lib/store'
 import { cn } from './lib/format'
 import { Logo } from './components/ui'
-import Today from './views/Today'
-import Habits from './views/Habits'
-import Tasks from './views/Tasks'
-import Budget from './views/Budget'
-import SettingsView from './views/Settings'
+import { BudgetSkeleton, HabitsSkeleton, SettingsSkeleton, TasksSkeleton, TodaySkeleton } from './components/skeletons'
 
-const ROUTES: { path: string; label: string; icon: LucideIcon; view: ComponentType }[] = [
-  { path: '/', label: 'Today', icon: SunMedium, view: Today },
-  { path: '/habits', label: 'Habits', icon: Repeat, view: Habits },
-  { path: '/tasks', label: 'Tasks', icon: ListChecks, view: Tasks },
-  { path: '/budget', label: 'Budget', icon: Wallet, view: Budget },
-  { path: '/settings', label: 'Settings', icon: Settings2, view: SettingsView },
+// Each screen is its own chunk; its skeleton shows while the chunk loads.
+const LOADERS = {
+  today: () => import('./views/Today'),
+  habits: () => import('./views/Habits'),
+  tasks: () => import('./views/Tasks'),
+  budget: () => import('./views/Budget'),
+  settings: () => import('./views/Settings'),
+}
+
+const ROUTES: { path: string; label: string; icon: LucideIcon; view: ComponentType; skeleton: ComponentType }[] = [
+  { path: '/', label: 'Today', icon: SunMedium, view: lazy(LOADERS.today), skeleton: TodaySkeleton },
+  { path: '/habits', label: 'Habits', icon: Repeat, view: lazy(LOADERS.habits), skeleton: HabitsSkeleton },
+  { path: '/tasks', label: 'Tasks', icon: ListChecks, view: lazy(LOADERS.tasks), skeleton: TasksSkeleton },
+  { path: '/budget', label: 'Budget', icon: Wallet, view: lazy(LOADERS.budget), skeleton: BudgetSkeleton },
+  { path: '/settings', label: 'Settings', icon: Settings2, view: lazy(LOADERS.settings), skeleton: SettingsSkeleton },
 ]
+
+/** Fetch the other screens once the first one is up, so switching tabs is instant. */
+function usePreloadScreens() {
+  useEffect(() => {
+    const run = () => Object.values(LOADERS).forEach((load) => load().catch(() => {}))
+    // Not every Safari version has requestIdleCallback.
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(run, { timeout: 2000 })
+      return () => window.cancelIdleCallback(id)
+    }
+    const id = setTimeout(run, 1200)
+    return () => clearTimeout(id)
+  }, [])
+}
+
+/** Dev aid: add ?skeleton to the URL to see a screen's loading state instead of the screen. */
+const forceSkeleton = import.meta.env.DEV && new URLSearchParams(location.search).has('skeleton')
 
 function useRoute() {
   const read = () => location.hash.replace(/^#/, '') || '/'
@@ -49,10 +71,12 @@ function useTheme() {
 
 export default function App() {
   useTheme()
+  usePreloadScreens()
   const { state, actions } = useApp()
   const path = useRoute()
   const route = ROUTES.find((r) => r.path === path) ?? ROUTES[0]
   const View = route.view
+  const Placeholder = route.skeleton
   const { theme } = state.settings
   const dark = theme === 'dark' || (theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
 
@@ -106,7 +130,13 @@ export default function App() {
         </header>
 
         <main key={route.path + String(state.settings.sample)} className="rise mx-auto max-w-[1380px] px-4 pt-5 pb-28 sm:px-6 md:pt-8 md:pb-12 lg:px-8">
-          <View />
+          {forceSkeleton ? (
+            <Placeholder />
+          ) : (
+            <Suspense fallback={<Placeholder />}>
+              <View />
+            </Suspense>
+          )}
         </main>
       </div>
 
