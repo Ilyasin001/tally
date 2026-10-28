@@ -82,7 +82,7 @@ export default function App() {
 
   return (
     <div className="min-h-dvh md:flex">
-      <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col border-r border-line px-3 py-5 md:flex">
+      <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col border-r border-line px-3 pt-[max(1.25rem,env(safe-area-inset-top))] pb-5 md:flex">
         <a href="#/" className="mb-7 flex items-center gap-2.5 px-2">
           <Logo />
           <span className="font-display text-xl font-semibold tracking-tight">Tally</span>
@@ -115,7 +115,7 @@ export default function App() {
       </aside>
 
       <div className="min-w-0 flex-1">
-        <header className="sticky top-0 z-20 flex items-center justify-between border-b border-line bg-bg/85 px-4 py-3 backdrop-blur md:hidden">
+        <header className="sticky top-0 z-20 flex items-center justify-between border-b border-line bg-bg/85 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-3 backdrop-blur md:hidden">
           <a href="#/" className="flex items-center gap-2">
             <Logo size={26} />
             <span className="font-display text-lg font-semibold">Tally</span>
@@ -129,7 +129,7 @@ export default function App() {
           </button>
         </header>
 
-        <main key={route.path + String(state.settings.sample)} className="rise mx-auto max-w-[1380px] px-4 pt-5 pb-28 sm:px-6 md:pt-8 md:pb-12 lg:px-8">
+        <main key={route.path + String(state.settings.sample)} className="rise mx-auto max-w-[1380px] px-4 pt-5 pb-28 sm:px-6 md:pt-[max(2rem,env(safe-area-inset-top))] md:pb-12 lg:px-8">
           {forceSkeleton ? (
             <Placeholder />
           ) : (

@@ -1,0 +1,8 @@
+.build/
+.swiftpm/
+.bsp/
+xtool/
+*.ipa
+
+# Copied in by `npm run ios:web`
+Sources/Tally/Web/

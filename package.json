@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "ios:web": "tsc --noEmit && vite build --outDir ios/Sources/Tally/Web --emptyOutDir"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",

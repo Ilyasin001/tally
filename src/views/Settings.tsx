@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { Download, Monitor, Moon, RotateCcw, Sparkles, Sun, Upload } from 'lucide-react'
-import { isAppState, useApp } from '../lib/store'
+import { isAppState, isNativeApp, postToNative, useApp } from '../lib/store'
 import { CURRENCIES, cn } from '../lib/format'
 import { todayISO } from '../lib/date'
 import type { Theme } from '../lib/types'
@@ -13,10 +13,17 @@ export default function SettingsView() {
   const [msg, setMsg] = useState('')
 
   const exportData = () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' })
+    const json = JSON.stringify(state, null, 2)
+    const filename = `tally-backup-${todayISO()}.json`
+    if (isNativeApp) {
+      // The iOS app shows the share sheet (Save to Files, AirDrop, …).
+      postToNative({ type: 'export', data: json, filename })
+      return
+    }
+    const blob = new Blob([json], { type: 'application/json' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
-    a.download = `tally-backup-${todayISO()}.json`
+    a.download = filename
     a.click()
     URL.revokeObjectURL(a.href)
     setMsg('Backup downloaded.')
@@ -43,7 +50,10 @@ export default function SettingsView() {
 
   return (
     <div className="max-w-2xl">
-      <PageHeader title="Settings" subtitle="Everything is saved in this browser. Nothing leaves your device." />
+      <PageHeader
+        title="Settings"
+        subtitle={isNativeApp ? 'Everything is saved on this device. Nothing is sent anywhere.' : 'Everything is saved in this browser. Nothing leaves your device.'}
+      />
 
       <div className="space-y-4">
         <Card title="Profile">
@@ -88,7 +98,7 @@ export default function SettingsView() {
           </p>
           <div className="flex flex-wrap gap-2">
             <Button onClick={exportData}>
-              <Download size={15} /> Download backup
+              <Download size={15} /> {isNativeApp ? 'Share backup' : 'Download backup'}
             </Button>
             <Button onClick={() => file.current?.click()}>
               <Upload size={15} /> Restore backup

@@ -1,0 +1,48 @@
+name: iOS build
+
+# Builds the unsigned iOS app with xtool on every change that affects it.
+# The .ipa is attached to the run; `xtool install` signs it for your device.
+on:
+  push:
+    paths:
+      - 'ios/**'
+      - 'src/**'
+      - 'index.html'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/ios.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build the web app into the iOS project
+        run: npm run ios:web
+
+      - name: Install xtool
+        run: brew install xtool-org/tap/xtool
+      - name: Build unsigned .ipa
+        working-directory: ios
+        run: xtool dev build --ipa --configuration release
+
+      - name: Locate the .ipa
+        id: ipa
+        working-directory: ios
+        run: |
+          ipa=$(find . -name '*.ipa' -not -path './.build/*' | head -n 1)
+          if [ -z "$ipa" ]; then echo "No .ipa was produced"; exit 1; fi
+          ls -la "$ipa"
+          echo "path=ios/${ipa#./}" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Tally-unsigned-ipa
+          path: ${{ steps.ipa.outputs.path }}
+          if-no-files-found: error

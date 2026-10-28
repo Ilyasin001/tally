@@ -33,6 +33,14 @@ Every push to `main` runs `.github/workflows/deploy.yml`, which builds the app a
 publishes it to GitHub Pages. You can also start a deploy by hand from the repo's
 **Actions** tab with **Run workflow**.
 
+## iOS app
+
+`ios/` holds a native iOS app built with [xtool](https://github.com/xtool-org/xtool).
+It wraps the same web build, works offline, and keeps its data on the phone. Every
+push also runs `.github/workflows/ios.yml`, which builds an unsigned `.ipa` you can
+download from the run. See [ios/README.md](ios/README.md) for installing it on an
+iPhone from Windows.
+
 ## What's in it
 
 - **Today**: today's habit check-ins with streaks, the tasks that need attention, what's
@@ -57,7 +65,10 @@ publishes it to GitHub Pages. You can also start a deploy by hand from the repo'
   summaries)
 - `src/lib/seed.ts`: sample data and default budget categories
 - `src/components/ui.tsx`: shared UI (cards, rings, donuts, modal, month picker)
-- `src/views/*`: one file per screen
+- `src/components/skeletons.tsx`: loading placeholders for each screen (add `?skeleton`
+  to the dev URL to preview them)
+- `src/views/*`: one file per screen, each loaded on demand
+- `ios/`: the xtool iOS app
 
 Stack: Vite, React 18, TypeScript, Tailwind CSS v4, lucide-react icons. Charts are plain
 SVG and CSS, with no chart library.

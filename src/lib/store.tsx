@@ -5,6 +5,21 @@ import { todayISO } from './date'
 
 const KEY = 'tally:v1'
 
+declare global {
+  interface Window {
+    /** Set by the iOS app before the page runs; holds its saved copy of the data. */
+    __TALLY_NATIVE__?: { state: unknown }
+    webkit?: { messageHandlers?: { tally?: { postMessage(message: unknown): void } } }
+  }
+}
+
+/** True inside the iOS app, which keeps a native copy of the data. */
+export const isNativeApp = typeof window !== 'undefined' && !!window.__TALLY_NATIVE__
+
+export function postToNative(message: { type: 'save' | 'export'; data: string; filename?: string }) {
+  window.webkit?.messageHandlers?.tally?.postMessage(message)
+}
+
 export function isAppState(s: unknown): s is AppState {
   const v = s as AppState
   return (
@@ -20,6 +35,8 @@ export function isAppState(s: unknown): s is AppState {
 }
 
 function load(): AppState {
+  const native = window.__TALLY_NATIVE__?.state
+  if (isAppState(native)) return native
   try {
     const raw = localStorage.getItem(KEY)
     if (raw) {
@@ -118,11 +135,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const actions = useMemo(() => createActions(setState), [])
 
   useEffect(() => {
+    const json = JSON.stringify(state)
     try {
-      localStorage.setItem(KEY, JSON.stringify(state))
+      localStorage.setItem(KEY, json)
     } catch {
       // Private mode or full storage: the app keeps working in memory.
     }
+    if (isNativeApp) postToNative({ type: 'save', data: json })
   }, [state])
 
   const value = useMemo(() => ({ state, actions }), [state, actions])
