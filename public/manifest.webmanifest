@@ -1,0 +1,12 @@
+{
+  "name": "Tally — habits, tasks & budget",
+  "short_name": "Tally",
+  "description": "Habits, tasks and budget in one calm daily tracker.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0e11",
+  "theme_color": "#0d0e11",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

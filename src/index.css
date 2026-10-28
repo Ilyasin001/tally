@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #f4f4ef;
+  --surface: #ffffff;
+  --surface-2: #eeeee8;
+  --border: #e1e1d9;
+  --text: #15171b;
+  --muted: #5f646d;
+  --faint: #a2a6ad;
+  --accent: #b8ec3c;
+  --accent-ink: #4a6e00;
+  --on-accent: #141a05;
+  --danger: #dc3b42;
+  --warn: #b97800;
+  --good: #128a5c;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0d0e11;
+  --surface: #15171b;
+  --surface-2: #1d2025;
+  --border: #262a30;
+  --text: #eceef1;
+  --muted: #8d939c;
+  --faint: #545961;
+  --accent: #c6f45b;
+  --accent-ink: #c6f45b;
+  --on-accent: #12160a;
+  --danger: #ff6b70;
+  --warn: #ffb224;
+  --good: #34d399;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-on-accent: var(--on-accent);
+  --color-danger: var(--danger);
+  --color-warn: var(--warn);
+  --color-good: var(--good);
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.field {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field::placeholder {
+  color: var(--faint);
+}
+.field:focus {
+  border-color: var(--accent-ink);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 22%, transparent);
+}
+
+select.field,
+select.pill {
+  appearance: none;
+  cursor: pointer;
+}
+select.field {
+  padding-right: 32px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238d939c' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.pill {
+  border: 0;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  outline: none;
+}
+.pill:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-ink);
+}
+
+/* Hide number spinners on inline money inputs. */
+input.bare::-webkit-outer-spin-button,
+input.bare::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input.bare {
+  -moz-appearance: textfield;
+}
+
+.scroll-x {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.7); }
+  60% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+.pop {
+  animation: pop 0.22s ease-out;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  animation: rise 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop,
+  .rise {
+    animation: none;
+  }
+}
